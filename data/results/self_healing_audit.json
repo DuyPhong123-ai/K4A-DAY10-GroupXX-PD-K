@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-09-25T10:26:23.457859+00:00",
+  "status": "AUTO_HEALED_SUCCESSFULLY",
+  "records_restored": 24,
+  "post_hit_rate": 1.0,
+  "post_token_f1": 1.0,
+  "quality_gate": "PASSED",
+  "freshness": "FRESH"
+}

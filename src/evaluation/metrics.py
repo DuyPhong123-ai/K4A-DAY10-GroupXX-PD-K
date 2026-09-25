@@ -7,7 +7,10 @@ import sys
 import types
 from typing import Any
 
-from datasets import Dataset
+try:
+    from datasets import Dataset
+except ImportError:
+    Dataset = None
 from pydantic import BaseModel, Field
 
 from core.config import Settings
