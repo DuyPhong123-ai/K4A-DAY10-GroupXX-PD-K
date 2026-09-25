@@ -8,6 +8,9 @@ from core.utils import first_sentence
 from retrieval.index import LocalEmbeddingIndex, SearchResult
 
 
+UNKNOWN_ANSWER = "I don't know from the indexed corpus."
+
+
 @dataclass(frozen=True)
 class AnswerResult:
     question: str
@@ -20,18 +23,41 @@ class AnswerResult:
 def _extract_answer(question: str, top_result: SearchResult) -> str:
     lowered = question.lower()
     metadata = top_result.metadata
-    if "who authored" in lowered or "list the authors" in lowered:
-        return metadata["authors_joined"]
-    if "when was" in lowered or "publication date" in lowered or "published on" in lowered:
-        return metadata["published"]
-    if "what categories" in lowered:
-        return metadata["categories_joined"]
-    return first_sentence(metadata["summary"])
+    if "author" in lowered or "who wrote" in lowered:
+        return str(metadata.get("authors_joined") or UNKNOWN_ANSWER)
+    if "when was" in lowered or "publication date" in lowered or "published" in lowered:
+        return str(metadata.get("published") or UNKNOWN_ANSWER)
+    if "categor" in lowered or "research field" in lowered or "subject" in lowered:
+        return str(metadata.get("categories_joined") or UNKNOWN_ANSWER)
+    summary = str(metadata.get("summary") or "")
+    return first_sentence(summary) if summary else UNKNOWN_ANSWER
+
+
+def _find_exact_document(question: str, index: LocalEmbeddingIndex) -> dict | None:
+    quoted_values = re.findall(r"['\"]([^'\"]+)['\"]", question)
+    for value in quoted_values:
+        match = index.lookup(value)
+        if match:
+            return match
+
+    doi_match = re.search(r"\b10\.\d{4,9}/[^\s'\"<>]+", question, flags=re.IGNORECASE)
+    if doi_match:
+        return index.lookup(doi_match.group(0).rstrip(".,;:!?)]}"))
+    return None
 
 
 def answer_question(question: str, settings: Settings, index: LocalEmbeddingIndex, top_k: int | None = None) -> AnswerResult:
-    title_match = re.search(r"'([^']+)'", question)
-    exact = index.lookup(title_match.group(1)) if title_match else None
+    question = question.strip()
+    if not question:
+        return AnswerResult(
+            question="",
+            answer=UNKNOWN_ANSWER,
+            retrieved_doc_ids=[],
+            retrieved_contexts=[],
+            retrieved_titles=[],
+        )
+
+    exact = _find_exact_document(question, index)
     retrieved = index.search(question, top_k=top_k)
     if exact:
         exact_result = SearchResult(
@@ -44,7 +70,7 @@ def answer_question(question: str, settings: Settings, index: LocalEmbeddingInde
         deduped = [exact_result] + [item for item in retrieved if item.paper_id != exact_result.paper_id]
         retrieved = deduped[: (top_k or settings.top_k)]
     if not retrieved:
-        answer = "I don't know from the indexed corpus."
+        answer = UNKNOWN_ANSWER
     else:
         answer = _extract_answer(question, retrieved[0])
     return AnswerResult(
