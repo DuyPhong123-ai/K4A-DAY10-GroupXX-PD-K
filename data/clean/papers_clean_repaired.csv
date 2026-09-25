@@ -19,16 +19,16 @@ Authors: Kien Duong, Vy Ly
 Published: 2026-06-25
 Categories: Robustness, Information Retrieval
 Summary: We introduce an automated fuzzing suite that corrupts text chunks by injecting noise, truncating titles, and blanking summaries. Experiments reveal critical failure thresholds for dense embedding retrieval."
-10.1145/3637528.3671802,Data Observability and Quality Gates for Production RAG Systems,Silent data corruption in RAG pipelines degrades LLM answer faithfulness without throwing runtime errors. We introduce automated quality gates using Great Expectations 1.x to catch stale and malformed embeddings before serving.,227,"['Anh Tran', 'Quoc Pham']","Anh Tran, Quoc Pham","['Software Engineering', 'Data Systems']","Software Engineering, Data Systems",Software Engineering,2026-06-12,2026-06-12,105,https://doi.org/10.1145/3637528.3671802,https://doi.org/10.1145/3637528.3671802,Crossref record 10.1145/3637528.3671802,"Title: Data Observability and Quality Gates for Production RAG Systems
-Authors: Anh Tran, Quoc Pham
-Published: 2026-06-12
-Categories: Software Engineering, Data Systems
-Summary: Silent data corruption in RAG pipelines degrades LLM answer faithfulness without throwing runtime errors. We introduce automated quality gates using Great Expectations 1.x to catch stale and malformed embeddings before serving."
 10.1145/3637528.3671824,Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines,An extended empirical study on tatic benchmarks fail to capture domain drift in enterprise knowledge bases. We establish a synthetic test generator that auto-creates paired evaluation sets whenever new corpora are ingested Further analysis on scaling parameters.,262,"['Quang Le', 'Yen Vu']","Quang Le, Yen Vu","['Evaluation Methodology', 'Enterprise Systems']","Evaluation Methodology, Enterprise Systems",Evaluation Methodology,2026-06-12,2026-06-12,105,https://doi.org/10.1145/3637528.3671824,https://doi.org/10.1145/3637528.3671824,Crossref record 10.1145/3637528.3671824,"Title: Advanced Perspectives on Continuous Benchmark Evaluation for Enterprise Retrieval Pipelines
 Authors: Quang Le, Yen Vu
 Published: 2026-06-12
 Categories: Evaluation Methodology, Enterprise Systems
 Summary: An extended empirical study on tatic benchmarks fail to capture domain drift in enterprise knowledge bases. We establish a synthetic test generator that auto-creates paired evaluation sets whenever new corpora are ingested Further analysis on scaling parameters."
+10.1145/3637528.3671802,Data Observability and Quality Gates for Production RAG Systems,Silent data corruption in RAG pipelines degrades LLM answer faithfulness without throwing runtime errors. We introduce automated quality gates using Great Expectations 1.x to catch stale and malformed embeddings before serving.,227,"['Anh Tran', 'Quoc Pham']","Anh Tran, Quoc Pham","['Software Engineering', 'Data Systems']","Software Engineering, Data Systems",Software Engineering,2026-06-12,2026-06-12,105,https://doi.org/10.1145/3637528.3671802,https://doi.org/10.1145/3637528.3671802,Crossref record 10.1145/3637528.3671802,"Title: Data Observability and Quality Gates for Production RAG Systems
+Authors: Anh Tran, Quoc Pham
+Published: 2026-06-12
+Categories: Software Engineering, Data Systems
+Summary: Silent data corruption in RAG pipelines degrades LLM answer faithfulness without throwing runtime errors. We introduce automated quality gates using Great Expectations 1.x to catch stale and malformed embeddings before serving."
 10.1145/3637528.3671823,Advanced Perspectives on Hybrid Search Architectures: Combining BM25 with Dense Representations,An extended empirical study on ense vector search excels at conceptual similarity but struggles with exact acronyms and serial numbers. Reciprocal Rank Fusion of sparse lexical scores and dense embeddings achieves optimal recall Further analysis on scaling parameters.,268,"['Dat Tran', 'Lan Pham']","Dat Tran, Lan Pham","['Information Retrieval', 'Algorithms']","Information Retrieval, Algorithms",Information Retrieval,2026-06-11,2026-06-11,106,https://doi.org/10.1145/3637528.3671823,https://doi.org/10.1145/3637528.3671823,Crossref record 10.1145/3637528.3671823,"Title: Advanced Perspectives on Hybrid Search Architectures: Combining BM25 with Dense Representations
 Authors: Dat Tran, Lan Pham
 Published: 2026-06-11
@@ -44,16 +44,16 @@ Authors: Long Trinh, Ha Chu
 Published: 2026-06-09
 Categories: Information Retrieval, Natural Language Processing
 Summary: An extended empirical study on ierarchical and semantic boundary chunking preserves code block contexts and markdown headings. Our benchmark demonstrates superior top-1 recall compared to fixed character length sliding windows Further analysis on scaling parameters."
-10.1145/3637528.3671810,Automated Data Quality Profiling with Great Expectations in CI/CD,Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model.,203,"['Son Nguyen', 'Thuy Doan']","Son Nguyen, Thuy Doan","['Data Quality', 'DevOps']","Data Quality, DevOps",Data Quality,2026-06-08,2026-06-08,109,https://doi.org/10.1145/3637528.3671810,https://doi.org/10.1145/3637528.3671810,Crossref record 10.1145/3637528.3671810,"Title: Automated Data Quality Profiling with Great Expectations in CI/CD
-Authors: Son Nguyen, Thuy Doan
-Published: 2026-06-08
-Categories: Data Quality, DevOps
-Summary: Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model."
 10.1145/3637528.3671820,Advanced Perspectives on Multi-Agent Consensus for High-Stakes Fact Verification,An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters.,271,"['Phong Vu', 'Ngan Hoang']","Phong Vu, Ngan Hoang","['Multi-Agent Systems', 'Artificial Intelligence']","Multi-Agent Systems, Artificial Intelligence",Multi-Agent Systems,2026-06-08,2026-06-08,109,https://doi.org/10.1145/3637528.3671820,https://doi.org/10.1145/3637528.3671820,Crossref record 10.1145/3637528.3671820,"Title: Advanced Perspectives on Multi-Agent Consensus for High-Stakes Fact Verification
 Authors: Phong Vu, Ngan Hoang
 Published: 2026-06-08
 Categories: Multi-Agent Systems, Artificial Intelligence
 Summary: An extended empirical study on single LLM is susceptible to confirmation bias when evaluating retrieved evidence. We demonstrate a multi-agent debate architecture where specialized verifier agents critique and corroborate citations Further analysis on scaling parameters."
+10.1145/3637528.3671810,Automated Data Quality Profiling with Great Expectations in CI/CD,Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model.,203,"['Son Nguyen', 'Thuy Doan']","Son Nguyen, Thuy Doan","['Data Quality', 'DevOps']","Data Quality, DevOps",Data Quality,2026-06-08,2026-06-08,109,https://doi.org/10.1145/3637528.3671810,https://doi.org/10.1145/3637528.3671810,Crossref record 10.1145/3637528.3671810,"Title: Automated Data Quality Profiling with Great Expectations in CI/CD
+Authors: Son Nguyen, Thuy Doan
+Published: 2026-06-08
+Categories: Data Quality, DevOps
+Summary: Embedding quality checks directly into data pipelines enables fail-closed governance. We show how Great Expectations suites catch schema drifts and null fields before documents reach the embedding model."
 10.1145/3637528.3671819,Advanced Perspectives on Synthetic Corruption Testing: Stress-Testing Vector Search Robustness,"An extended empirical study on e introduce an automated fuzzing suite that corrupts text chunks by injecting noise, truncating titles, and blanking summaries. Experiments reveal critical failure thresholds for dense embedding retrieval Further analysis on scaling parameters.",275,"['Kien Duong', 'Vy Ly']","Kien Duong, Vy Ly","['Robustness', 'Information Retrieval']","Robustness, Information Retrieval",Robustness,2026-06-07,2026-06-07,110,https://doi.org/10.1145/3637528.3671819,https://doi.org/10.1145/3637528.3671819,Crossref record 10.1145/3637528.3671819,"Title: Advanced Perspectives on Synthetic Corruption Testing: Stress-Testing Vector Search Robustness
 Authors: Kien Duong, Vy Ly
 Published: 2026-06-07

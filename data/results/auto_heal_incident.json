@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-09-25T10:26:22.637465+00:00",
+  "incident_type": "DATA_CORRUPTION_OR_STALENESS",
+  "failed_checks": [
+    {
+      "name": "paper_id_unique",
+      "success": false
+    },
+    {
+      "name": "summary_length",
+      "success": false
+    },
+    {
+      "name": "title_valid",
+      "success": false
+    }
+  ],
+  "freshness": {
+    "latest_published": "2026-06-06",
+    "oldest_published": "2025-06-07",
+    "stale_rows": 11,
+    "total_rows": 22,
+    "stale_ratio": 0.5,
+    "threshold_days": 180,
+    "max_stale_ratio": 0.25,
+    "is_fresh": false,
+    "generated_at": "2026-09-25T10:26:22.636828+00:00"
+  },
+  "action": "AUTO_REPAIR_TRIGGERED"
+}
