@@ -6,7 +6,7 @@
 | :--- | :--- |
 | **Khóa / Lớp** | K4/L3A |
 | **Tên nhóm** | PD |
-| **Repository** | https://github.com/DuyPhong123-ai/K4A-DAY10-GroupXX-PD |
+| **Repository** | https://github.com/DuyPhong123-ai/K4A-DAY10-PD |
 | **Ngày hoàn thành** | 2026-09-25 |
 
 ### Thành viên và phân công
