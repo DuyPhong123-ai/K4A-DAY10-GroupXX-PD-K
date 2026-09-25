@@ -5,12 +5,36 @@ from typing import Any
 from langchain.agents import create_agent
 from langchain.tools import tool
 
-from core.config import Settings
+from core.config import Settings, normalized_provider
 from retrieval.index import LocalEmbeddingIndex
 from retrieval.llm import build_llm
+from retrieval.qa import answer_question
+
+
+class LocalPaperAgent:
+    """Offline-compatible agent used by the mock provider for reproducible demos."""
+
+    def __init__(self, settings: Settings, index: LocalEmbeddingIndex):
+        self.settings = settings
+        self.index = index
+
+    def invoke(self, payload: dict[str, Any]) -> dict[str, Any]:
+        messages = payload.get("messages", [])
+        question = ""
+        if messages:
+            last_message = messages[-1]
+            if isinstance(last_message, dict):
+                question = str(last_message.get("content", ""))
+            else:
+                question = str(getattr(last_message, "content", last_message))
+        result = answer_question(question, settings=self.settings, index=self.index)
+        return {"messages": [*messages, {"role": "assistant", "content": result.answer}]}
 
 
 def build_agent(settings: Settings, index: LocalEmbeddingIndex):
+    if normalized_provider(settings) == "mock":
+        return LocalPaperAgent(settings=settings, index=index)
+
     @tool
     def semantic_search_papers(query: str, top_k: int = 4) -> str:
         """Search the local paper corpus with embeddings and return the most relevant papers."""
@@ -23,7 +47,7 @@ def build_agent(settings: Settings, index: LocalEmbeddingIndex):
                 f"score: {result.score:.4f}\n"
                 f"{result.content}"
             )
-        return "\n\n".join(lines)
+        return "\n\n".join(lines) if lines else "No relevant papers found in the indexed corpus."
 
     @tool
     def lookup_paper(paper_id_or_title: str) -> str:
@@ -56,4 +80,14 @@ def run_agent_question(agent: Any, question: str) -> str:
     if not messages:
         return ""
     final_message = messages[-1]
-    return getattr(final_message, "content", str(final_message))
+    if isinstance(final_message, dict):
+        return str(final_message.get("content", ""))
+    content = getattr(final_message, "content", final_message)
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        return "\n".join(
+            str(item.get("text", item)) if isinstance(item, dict) else str(item)
+            for item in content
+        )
+    return str(content)
