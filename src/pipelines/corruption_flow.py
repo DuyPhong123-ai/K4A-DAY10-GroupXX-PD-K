@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import datetime, timezone
-from pathlib import Path
 import sys
 import pandas as pd
 
@@ -20,6 +20,23 @@ from ingestion.crossref import fetch_source_records, load_raw_records
 from observability.quality import run_data_quality_checks
 from observability.reporting import generate_corruption_report
 from retrieval.index import LocalEmbeddingIndex
+
+
+def _failed_quality_signals(report: dict) -> list[str]:
+    failures = [
+        str(check.get("name", "unknown_check"))
+        for check in report.get("checks", [])
+        if not check.get("success", False)
+    ]
+    if not report.get("freshness", {}).get("is_fresh", False):
+        failures.append("freshness_sla")
+    return failures or ["quality_gate"]
+
+
+def _persist_repaired_dataframe(df, settings) -> None:
+    settings.paths.repaired_clean_csv.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(settings.paths.repaired_clean_csv, index=False)
+    write_json(settings.paths.repaired_clean_json, df.to_dict(orient="records"))
 
 
 def main() -> None:
@@ -81,24 +98,77 @@ def main() -> None:
     print(f"  -> Corrupted Hit Rate: {corrupted_metrics.get('retrieval_hit_rate', 0.0):.4f}")
     print(f"  -> Corrupted Token F1: {corrupted_metrics.get('mean_token_f1', 0.0):.4f}")
 
-    # 5. Idempotent Repair (Checkpoint 5)
-    print("\n[Step 4/5] Self-Healing: Executing Idempotent Repair from raw snapshot...")
-    if settings.paths.raw_records_json.exists():
-        raw_records = load_raw_records(settings.paths.raw_records_json)
+    # 5. Automated Self-Healing (Checkpoint 5 + Rubric B2)
+    # Repair is causally triggered by the failed quality gate instead of always running.
+    print("\n[Step 4/5] Self-Healing: Evaluating automatic repair trigger...")
+    repair_triggered = not bool(corrupted_quality.get("success", False))
+    healing_log = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "pipeline": "corruption_flow",
+        "detector": "great_expectations_and_freshness_sla",
+        "triggered": repair_triggered,
+        "initial_quality_success": bool(corrupted_quality.get("success", False)),
+        "trigger_signals": _failed_quality_signals(corrupted_quality) if repair_triggered else [],
+        "attempts": [],
+    }
+
+    repaired_df = corrupted_df.copy()
+    repaired_quality = corrupted_quality
+
+    if repair_triggered:
+        print("  -> AUTO-HEAL TRIGGERED: Quality violations detected; corrupted data is blocked.")
+        repair_strategies = []
+        if settings.paths.raw_records_json.exists():
+            repair_strategies.append(
+                ("rebuild_from_raw_snapshot", lambda: load_raw_records(settings.paths.raw_records_json))
+            )
+        repair_strategies.append(
+            (
+                "refetch_crossref_and_rebuild",
+                lambda: fetch_source_records(replace(settings, refresh_source=True)),
+            )
+        )
+
+        for strategy_name, load_records in repair_strategies:
+            attempt = {"strategy": strategy_name, "success": False}
+            print(f"  -> Auto-repair attempt: {strategy_name}")
+            try:
+                raw_records = load_records()
+                candidate_df = build_clean_dataframe(raw_records, run_date=now)
+                _persist_repaired_dataframe(candidate_df, settings)
+                candidate_quality = run_data_quality_checks(candidate_df, settings, "repaired")
+                attempt["quality_success"] = bool(candidate_quality.get("success", False))
+                attempt["row_count"] = len(candidate_df)
+                attempt["success"] = attempt["quality_success"]
+                repaired_df = candidate_df
+                repaired_quality = candidate_quality
+                if attempt["success"]:
+                    print(f"  -> Auto-repair succeeded with {strategy_name}.")
+            except Exception as exc:
+                attempt["error"] = str(exc)
+                print(f"  -> Auto-repair attempt failed: {exc}")
+            healing_log["attempts"].append(attempt)
+            if attempt["success"]:
+                break
     else:
-        raw_records = fetch_source_records(settings)
+        print("  -> Quality Gate passed; no repair action was necessary.")
+        _persist_repaired_dataframe(repaired_df, settings)
+        repaired_quality = run_data_quality_checks(repaired_df, settings, "repaired")
 
-    repaired_df = build_clean_dataframe(raw_records, run_date=now)
-    settings.paths.repaired_clean_csv.parent.mkdir(parents=True, exist_ok=True)
-    repaired_df.to_csv(settings.paths.repaired_clean_csv, index=False)
-    write_json(settings.paths.repaired_clean_json, repaired_df.to_dict(orient="records"))
-    print(f"  -> Repaired dataset rebuilt from raw source ({len(repaired_df)} records).")
-
-    print("  -> Validating repaired dataset with Quality Gate...")
-    repaired_quality = run_data_quality_checks(repaired_df, settings, "repaired")
     repaired_freshness = repaired_quality.get("freshness", {})
-    print(f"  -> Repaired Quality Gate Status: {repaired_quality.get('success', False)} (Expected: True)")
+    repair_success = bool(repaired_quality.get("success", False))
+    healing_log["final_quality_success"] = repair_success
+    healing_log["serving_allowed"] = repair_success
+    healing_log_path = settings.paths.project_dir / "data" / "results" / "corruption_self_healing_log.json"
+    write_json(healing_log_path, healing_log)
+    print(f"  -> Self-healing audit log: {healing_log_path}")
+    print(f"  -> Repaired Quality Gate Status: {repair_success} (Expected: True)")
     print(f"  -> Repaired Freshness SLA Status: {repaired_freshness.get('is_fresh', False)} (Expected: True)")
+
+    if not repair_success:
+        raise RuntimeError(
+            "Automatic repair/refetch did not restore data quality; repaired indexing is blocked."
+        )
 
     print("  -> Indexing repaired papers into collection 'papers-repaired'...")
     repaired_index = LocalEmbeddingIndex.build(
