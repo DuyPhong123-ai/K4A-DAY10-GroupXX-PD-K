@@ -60,7 +60,7 @@ class LocalEmbeddingIndex:
         self.documents_by_title = {document["title"].lower(): document for document in documents}
 
     @staticmethod
-    def _build_documents(df: pd.DataFrame) -> list[dict[str, Any]]:
+    def _build_documents(df: pd.DataFrame, allow_duplicates: bool = False) -> list[dict[str, Any]]:
         missing_columns = sorted(REQUIRED_DOCUMENT_COLUMNS - set(df.columns))
         if missing_columns:
             raise ValueError(f"Cannot build vector index; missing columns: {', '.join(missing_columns)}")
@@ -78,7 +78,7 @@ class LocalEmbeddingIndex:
                 raise ValueError(f"Row {index} has an empty paper_id, title, or text_for_embedding.")
 
             normalized_paper_id = paper_id.lower()
-            if normalized_paper_id in seen_paper_ids:
+            if not allow_duplicates and normalized_paper_id in seen_paper_ids:
                 raise ValueError(f"Duplicate paper_id cannot be indexed: {paper_id}")
             seen_paper_ids.add(normalized_paper_id)
 
@@ -127,9 +127,11 @@ class LocalEmbeddingIndex:
         df: pd.DataFrame,
         settings: Settings,
         embeddings_output_path: Path | None = None,
+        allow_duplicates: bool = False,
     ) -> "LocalEmbeddingIndex":
         collection_name = cls._derive_collection_name(settings, embeddings_output_path)
-        documents = cls._build_documents(df)
+        is_corrupted = (collection_name == settings.corrupted_collection_name)
+        documents = cls._build_documents(df, allow_duplicates=allow_duplicates or is_corrupted)
         persist_path = settings.paths.chroma_dir
         persist_path.mkdir(parents=True, exist_ok=True)
 

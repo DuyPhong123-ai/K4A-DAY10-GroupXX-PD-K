@@ -1,6 +1,6 @@
 {
-  "report_name": "baseline",
-  "generated_at": "2026-09-25T09:31:03.356157+00:00",
+  "report_name": "test",
+  "generated_at": "2026-09-25T09:24:54.518596+00:00",
   "row_count": 24,
   "success": true,
   "checks": [
@@ -12,7 +12,7 @@
         "expectation_config": {
           "type": "expect_table_row_count_to_be_between",
           "kwargs": {
-            "batch_id": "papers_source_baseline-papers_asset",
+            "batch_id": "papers_source_test-papers_asset",
             "min_value": 5,
             "max_value": 5000
           },
@@ -38,7 +38,7 @@
         "expectation_config": {
           "type": "expect_column_values_to_not_be_null",
           "kwargs": {
-            "batch_id": "papers_source_baseline-papers_asset",
+            "batch_id": "papers_source_test-papers_asset",
             "column": "paper_id"
           },
           "meta": {},
@@ -68,7 +68,7 @@
         "expectation_config": {
           "type": "expect_column_values_to_not_be_null",
           "kwargs": {
-            "batch_id": "papers_source_baseline-papers_asset",
+            "batch_id": "papers_source_test-papers_asset",
             "column": "title"
           },
           "meta": {},
@@ -98,7 +98,7 @@
         "expectation_config": {
           "type": "expect_column_values_to_not_be_null",
           "kwargs": {
-            "batch_id": "papers_source_baseline-papers_asset",
+            "batch_id": "papers_source_test-papers_asset",
             "column": "text_for_embedding"
           },
           "meta": {},
@@ -128,7 +128,7 @@
         "expectation_config": {
           "type": "expect_column_values_to_be_unique",
           "kwargs": {
-            "batch_id": "papers_source_baseline-papers_asset",
+            "batch_id": "papers_source_test-papers_asset",
             "column": "paper_id"
           },
           "meta": {},
@@ -162,7 +162,7 @@
         "expectation_config": {
           "type": "expect_column_value_lengths_to_be_between",
           "kwargs": {
-            "batch_id": "papers_source_baseline-papers_asset",
+            "batch_id": "papers_source_test-papers_asset",
             "column": "summary",
             "min_value": 30
           },

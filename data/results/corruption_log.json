@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-09-25T09:41:30.553540+00:00",
+  "original_rows": 24,
+  "corrupted_rows": 22,
+  "total_scenarios_applied": 6,
+  "scenarios": [
+    {
+      "scenario": "drop_latest_records",
+      "description": "Dropped 4 latest records (20% of dataset)",
+      "affected_count": 4,
+      "dropped_paper_ids": [
+        "10.1145/3637528.3671812",
+        "10.1145/3637528.3671808",
+        "10.1145/3637528.3671804",
+        "10.1145/3637528.3671807"
+      ]
+    },
+    {
+      "scenario": "blank_summary",
+      "description": "Erased abstract/summary to simulate empty scraped data",
+      "affected_indices": [
+        0,
+        1
+      ],
+      "affected_paper_ids": [
+        "10.1145/3637528.3671802",
+        "10.1145/3637528.3671824"
+      ]
+    },
+    {
+      "scenario": "inject_noise",
+      "description": "Injected random garbage strings into abstracts to pollute semantic similarity",
+      "affected_indices": [
+        2,
+        3
+      ],
+      "affected_paper_ids": [
+        "10.1145/3637528.3671823",
+        "10.1145/3637528.3671822"
+      ]
+    },
+    {
+      "scenario": "truncate_title",
+      "description": "Truncated titles down to < 8 characters ('Paper..')",
+      "affected_indices": [
+        4,
+        5
+      ],
+      "affected_paper_ids": [
+        "10.1145/3637528.3671821",
+        "10.1145/3637528.3671810"
+      ]
+    },
+    {
+      "scenario": "stale_date",
+      "description": "Shifted 8 paper publication dates back by 365 days to fail Freshness SLA (>180 days)",
+      "affected_count": 8,
+      "affected_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "scenario": "duplicate_rows",
+      "description": "Duplicated 2 rows to violate primary key uniqueness expectation (ExpectColumnValuesToBeUnique)",
+      "duplicated_count": 2,
+      "duplicated_paper_ids": [
+        "10.1145/3637528.3671802",
+        "10.1145/3637528.3671824"
+      ]
+    }
+  ]
+}
