@@ -114,7 +114,7 @@ Starter Repo được cấu trúc dạng module hóa rõ ràng:
 │   ├── ingestion/           <- crossref.py (lấy data), cleaning.py (làm sạch), corruption.py (tiêm lỗi)
 │   ├── retrieval/           <- MiniLM embedding, Chroma index, QA agent
 │   ├── evaluation/          <- testset.py (sinh đề thi), metrics.py (tính Hit rate, F1)
-│   ├── observability/       <- quality.py (Great Expectations 1.x), reporting.py
+│   ├── observability/       <- quality.py, reporting.py, dashboard.py (Streamlit)
 │   └── pipelines/           <- phase1.py (điều phối baseline), corruption_flow.py
 ├── docs/                    <- Thư mục tài liệu hướng dẫn, quy chuẩn và rubric của bài lab
 │   ├── Guide.md             <- Hướng dẫn kỹ thuật chi tiết từng bước
@@ -194,7 +194,19 @@ GOOGLE_API_KEY=your_gemini_api_key_here
 
 ---
 
-## 6. QUY TẮC PHỐI HỢP & CHECKLIST TRƯỚC KHI NỘP BÀI
+## 6. OBSERVABILITY DASHBOARD & DRIFT MONITOR (BONUS B1)
+
+Sau khi chạy hai pipeline để sinh artifact, khởi động dashboard bằng:
+
+```powershell
+.\.venv\Scripts\streamlit.exe run src\observability\dashboard.py
+```
+
+Dashboard hiển thị Quality Gate, Freshness SLA, biểu đồ phân bố `age_days`, so sánh RAG metrics giữa Baseline/Corrupted/Repaired, cảnh báo drift và trạng thái Automated Self-Healing. Có thể bật **Tự động làm mới** trong thanh bên để theo dõi artifact theo chu kỳ.
+
+---
+
+## 7. QUY TẮC PHỐI HỢP & CHECKLIST TRƯỚC KHI NỘP BÀI
 
 ### 👥 Phân chia vai trò gợi ý (Nhóm 4 thành viên):
 - **Thành viên 1 (Pipeline Lead & Integrator):** Điều phối luồng, quản lý cấu hình `core/`, kết nối `phase1.py` và `corruption_flow.py`.
@@ -218,6 +230,7 @@ GOOGLE_API_KEY=your_gemini_api_key_here
   - `data/results/repaired_metrics.json` (chứng minh chỉ số phục hồi)
   - `data/reports/corruption_report.md` (bảng đối chiếu 3 trạng thái rõ ràng)
 - [ ] **Data Observability (GX 1.x):** Quality Gate sử dụng cú pháp chuẩn GX 1.x (`gx.get_context()`, `add_pandas()`), phát hiện thành công khi data bị inject lỗi.
+- [ ] **Dashboard B1:** Lệnh `streamlit run src/observability/dashboard.py` mở được giao diện Quality/Freshness, phân bố tuổi dữ liệu và cảnh báo drift.
 - [ ] **Bảo mật:** Không commit file `.env` hoặc API Key cá nhân lên GitHub.
 - [ ] **Kiểm tra Contributor trên GitHub:** 
   > ⚠️ **QUY TẮC ĐIỂM DANH GITHUB:**  
