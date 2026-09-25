@@ -5,7 +5,7 @@
   "embedding_dimension": 384,
   "document_count": 24,
   "persist_path": "data/chroma",
-  "collection_name": "papers-baseline",
+  "collection_name": "papers-repaired",
   "documents": [
     {
       "record_id": "10.1145/3637528.3671812::0",

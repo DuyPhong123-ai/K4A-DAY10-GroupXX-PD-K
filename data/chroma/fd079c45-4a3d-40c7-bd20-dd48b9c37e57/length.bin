@@ -1,0 +1,5 @@
+Title: Paper..
+Authors: Long Trinh, Ha Chu
+Published: 2025-06-09
+Categories: Information Retrieval, Natural Language Processing
+Summary: An extended empirical study on ierarchical and semantic boundary chunking preserves code block contexts and markdown headings. Our benchmark demonstrates superior top-1 recall compared to fixed character length sliding windows Further analysis on scaling paramete
