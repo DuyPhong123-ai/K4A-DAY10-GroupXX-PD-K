@@ -4,10 +4,10 @@
 
 | Thông tin         | Nội dung                                                                 |
 | ------------------ | ------------------------------------------------------------------------- |
-| Họ và tên          | Duy Phong (duyphong134)                                                  |
-| MSSV               | [Điền MSSV của bạn tại đây]                                              |
-| Khóa/Lớp           | K4A-DAY10                                                                |
-| Tên nhóm           | Group XX - PD-K                                                          |
+| Họ và tên          | Nguyễn Duy Phong                                                   |
+| MSSV               | 2A202602834                                      |
+| Khóa/Lớp           | K4/L3A                                                 |
+| Tên nhóm           | PD                                                          |
 | Vai trò chính      | Trưởng nhóm / Pipeline Integrator & Data Quality Architect (Member 1)    |
 | Repository         | https://github.com/DuyPhong123-ai/K4A-DAY10-GroupXX-PD-K                 |
 | Ngày hoàn thành    | 2026-09-25                                                               |
